@@ -72,7 +72,7 @@ class cloud:
 		# num=0
 		for idx in links_ :
 			# num+=1
-			for _point in links[idx].points:
+			for _point in links_[idx].points:
 				_p = Point32()
 				_p.x = _point[0]
 				_p.y = _point[1]
@@ -80,7 +80,27 @@ class cloud:
 				_pc.points.append(_p)
 			# print(num)
 		self.link_pub.publish(_pc)
-	
+
+	def draw_mg(self):	
+		mygraph = { idx : self.node_weight(idx,nodes,links) for idx in nodes }
+		print(mygraph)
+		print("end")
+
+	def node_weight(self,_idx,_nodes,_links):
+		idx_list=[]
+		graph2={}
+		for i in _nodes[_idx].get_to_links_idx_list():
+			idx_list.append(i)
+			for idxl in range(len(idx_list)):
+				end_node1 = links[idx_list[idxl]].to_node
+				end_node = end_node1.idx
+				weight=len(links[idx_list[idxl]].points)
+				graph1 = { end_node : weight}
+				graph2.update(graph1)
+			# print(graph)
+		idx_list=[]
+		return graph2
+
 if __name__ == "__main__":
 
 	rospy.init_node("point_link_pub",anonymous = False)
@@ -92,6 +112,7 @@ if __name__ == "__main__":
 	while not rospy.is_shutdown():
 		pub.Points(nodes)
 		pub.links(links)
+		pub.draw_mg()
 		rate.sleep()
 	
 

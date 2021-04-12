@@ -5,23 +5,26 @@ import heapq
 
 def dijkstra(graph,start):
 
-	print(graph)
-	for node in graph:
-		print(node)
+	# print(graph)
+	# for node in graph:
+		# print(node)
 	distances = {node: float('inf') for node in graph }
 	
 	print(distances)
 	distances[start] = 0 
 	queue = [] 
 	heapq.heappush(queue, [distances[start],start])
+	# print(queue)	
 
 	while queue:
 		current_distance, current_node = heapq.heappop(queue)
-
+		print("current_distance:{0},current_node:{1}".format(current_distance,current_node))
 		if distances[current_node] < current_distance:
 			continue
 		
 		for adjacent, weight in graph[current_node].items():
+			# print(current_node)
+			print("adjacent:{0},weight:{1}".format(adjacent,weight))
 			distance = current_distance + weight
 
 			if distance < distances[adjacent]:
