@@ -5,6 +5,7 @@ import os
 import sys
 import rospy
 from sensor_msgs.msg import PointCloud
+import heapq
 
 current_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(current_path)
@@ -55,8 +56,40 @@ def node_weight(_idx,_nodes,_links):
 	# print("end")
 	return (graph2)		
 
-mygraph = { idx : node_weight(idx,nodes,links) for idx in nodes }
-print(mygraph)
+def draw_mg(_nodes ,_links):	
+	mygraph = { idx : node_weight(idx,_nodes,_links) for idx in _nodes }
+	return mygraph
+
+def dijkstra(graph,start,end):
+
+	distances = {node: [float('inf'),start] for node in graph}
+
+	distances[start] = [0,start]
+	queue = []
+	heapq.heappush(queue, [distances[start][0],start])
+
+	while queue:
+		current_distance, current_node = heapq.heappop(queue)
+		if distances[current_node][0] < current_distance:
+			continue
+		for adjacent , weight in graph[current_node].items():
+			distance = current_distance + weight 
+
+			if distance < distances[adjacent][0]:
+				distances[adjacent] = [distance,current_node]
+				heapq.heappush(queue,[distances[adjacent][0],adjacent])
+	path = end
+	path_output = end + "->"
+	while distances[path][1] != start:
+		path_output += distances[path][1] + "->"
+		path = distances[path][1]
+	path_output += start
+	print(path_output)
+	return distances
+
+# print(draw_mg(nodes,links))
+print(dijkstra(draw_mg(nodes,links),"A119BS010695","A119BS010327"))
+
 
 # print( nodes["A119BS010223"].get_to_links_idx_list())
 

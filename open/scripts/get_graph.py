@@ -47,6 +47,10 @@ class cloud:
 			PointCloud,
 			queue_size = 5
 		)
+		
+		# mygraph = self.draw_mg()
+		# print(dijkstra(mygraph,"A119BS010695"))
+
 
 		# self.point_pub.publish(self.Points(nodes))
 		# print(self.Points(nodes))
@@ -122,21 +126,18 @@ class cloud:
 					heapq.heappush(queue,[distances[adjacent],adjacent])
 		return distances
 
-	mygraph = self.draw_mg()
-	print(dijkstra(mygraph,"A119BS010695"))
-
 if __name__ == "__main__":
 
 	rospy.init_node("point_link_pub",anonymous = False)
 	pub = cloud()
 	
 	# rospy.spin()
-
+	print(pub.dijkstra(pub.draw_mg(),"A119BS010695"))
+	# pub.draw_mg()
 	rate = rospy.Rate(10)
 	while not rospy.is_shutdown():
 		pub.Points(nodes)
 		pub.links(links)
-		pub.draw_mg()
 		rate.sleep()
 	
 
