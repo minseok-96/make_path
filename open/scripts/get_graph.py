@@ -83,8 +83,9 @@ class cloud:
 
 	def draw_mg(self):	
 		mygraph = { idx : self.node_weight(idx,nodes,links) for idx in nodes }
-		print(mygraph)
-		print("end")
+		return mygraph
+		# print(mygraph)
+		# print("end")
 
 	def node_weight(self,_idx,_nodes,_links):
 		idx_list=[]
@@ -100,6 +101,29 @@ class cloud:
 			# print(graph)
 		idx_list=[]
 		return graph2
+
+	def dijkstra(graph,start):
+
+		distances = {node: float('inf') for node in graph}
+
+		distances[start] = 0
+		queue = []
+		heapq.heappush(queue, [distances[start],start])
+
+		while queue:
+			currnet_distance, current_node = heapq.heappop(queue)
+			if distances[current_node] < currnet_distance:
+				continue
+			for adjacent , weight in graph[current_node].items():
+				distance = current_distance + weight 
+
+				if distance < distances[adjacent]:
+					distances[adjacent] = distance
+					heapq.heappush(queue,[distances[adjacent],adjacent])
+		return distances
+
+	mygraph = self.draw_mg()
+	print(dijkstra(mygraph,"A119BS010695"))
 
 if __name__ == "__main__":
 
